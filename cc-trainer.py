@@ -6,6 +6,7 @@ exchangeUser = os.environ['EXCHANGE_USER']
 exchangePassword = os.environ['EXCHANGE_PASSWORD']
 exchangeEmail = os.environ['EXCHANGE_EMAIL']
 exchangeCCFolder = os.environ['EXCHANGE_CCFOLDER']
+messageToSend = os.environ['EXCHANGE_MESSAGE']
 
 config = Configuration(server=exchangeServer, credentials = Credentials(username=exchangeUser, password=exchangePassword))
 
@@ -43,13 +44,7 @@ def process_cc(itemsToProcess, ccfolder):
             account=account,
             folder=account.sent,
             subject='Regarding your email: ' + item.subject,
-            body='''
-You've CC'd me, so this email may not be seen in a 
-timely manner, as this is routed outside my inbox.
-
-(Sent by my RaspberryPi running a Python script described
-here: http://github.com/ahplummer/cc-trainer.)
-''',
+            body=messageToSend,
             to_recipients=[Mailbox(email_address=item.author.email_address)]
         )
         m.send_and_save()
